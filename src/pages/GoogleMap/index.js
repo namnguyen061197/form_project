@@ -39,10 +39,11 @@ export class MapContainer extends Component {
       })
       .catch(error => console.error('Error', error));
   };
+  
  
   render() {
     return (
-      <div id='googleMaps'>
+      <div id='googleMaps' style={{height:"100vh"}}>
         <PlacesAutocomplete
           value={this.state.address}
           onChange={this.handleChange}

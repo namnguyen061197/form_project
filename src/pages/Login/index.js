@@ -58,6 +58,7 @@ const Login = (props) => {
         setLoadingBtn(true)
         if(listUsers.data.find(item => item.email === data.email )){
             setErrorExistAcc(true);
+            await setLoadingBtn(false)
 
         }else {
             if(data.name && data.address && data.email && data.phone ){
@@ -69,9 +70,6 @@ const Login = (props) => {
                 setLoadingBtn(false)
             }
         }
-            // else{
-            //     setLoadingBtn(false)
-            // }
 
     }
 
@@ -116,7 +114,7 @@ const Login = (props) => {
                     />
                     <ReCAPTCHA
                         sitekey="6LeTci8UAAAAAAZV-D4OGD9x7VJvBUQ8QJDT9N4X"
-                        callback={() => console.log("callback")}
+                        callback={(value) => console.log(value)}
                         expiredCallback={() => console.log("expried callback")}
                         locale="en"
                     />

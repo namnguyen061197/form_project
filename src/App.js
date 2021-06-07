@@ -4,7 +4,7 @@ import React from "react"
 import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
 import Login from "./pages/Login"
 import HomePage from "./pages/Home";
-import GoogleMap from './pages/GoogleMap';
+import GoogleMap from './pages/GoogleMap/index1';
 
 
 function App() {
