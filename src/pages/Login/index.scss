@@ -15,6 +15,10 @@
         background-color: rgba($color: #304f2a, $alpha: 0.75);
         color: #ffffff;
         text-align: center;
+        .g-recaptcha {
+            display: flex;
+            justify-content: center;
+        }
         .avatar {
             display: flex;
             margin-bottom: 15px;

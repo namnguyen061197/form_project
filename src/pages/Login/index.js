@@ -1,15 +1,31 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./index.scss";
-import {Avatar, FormLayout, TextField} from '@shopify/polaris';
+import {Avatar, FormLayout, TextField, Button} from '@shopify/polaris';
 import ReCAPTCHA from 'react-grecaptcha'
+import UserAPI from "../../api/userApi";
+import {useHistory} from "react-router-dom"
+import GoogleMap from "../GoogleMap";
 
 
 const Login = (props) => {
+    const history = useHistory()
+
     const [data, setData] = useState({});
+    const [loadingBtn, setLoadingBtn] = useState(false);
+    const [listUsers, setListUsers] = useState([]);
+    const [errorExistAcc, setErrorExistAcc] = useState(false)
+
     const handleOnChange = (value,id) => {
         setData({...data,[id]: value});
 
     }
+    useEffect(() => {
+        const fetchListUser = async() => {
+            const newListUsers = await UserAPI.getAllUser();
+            setListUsers(newListUsers)
+        }
+        fetchListUser()
+    },[])
     // validate function
     const isRequired = (value) => {
         if(!value) {
@@ -36,6 +52,27 @@ const Login = (props) => {
             default:
                 break;
         }
+    }
+    // function submit
+    const handleSubmit = async(data) => {
+        setLoadingBtn(true)
+        if(listUsers.data.find(item => item.email === data.email )){
+            setErrorExistAcc(true);
+
+        }else {
+            if(data.name && data.address && data.email && data.phone ){
+                await UserAPI.postUser(data);
+                await setLoadingBtn(false)
+                await history.push("/home");
+            }
+            else{
+                setLoadingBtn(false)
+            }
+        }
+            // else{
+            //     setLoadingBtn(false)
+            // }
+
     }
 
     return (
@@ -78,11 +115,14 @@ const Login = (props) => {
                         error={errorMessage(data.phone, isPhoneNumber)} 
                     />
                     <ReCAPTCHA
-                        sitekey="6LeOjQkbAAAAAGnT7nHKhNCPbYxY3rKS8Cx-OE4q"
+                        sitekey="6LeTci8UAAAAAAZV-D4OGD9x7VJvBUQ8QJDT9N4X"
                         callback={() => console.log("callback")}
                         expiredCallback={() => console.log("expried callback")}
                         locale="en"
                     />
+                    
+                    <Button primary loading={loadingBtn} type="submit" onClick={() => handleSubmit(data)}>Submit</Button>
+                    {errorExistAcc && <p>Email existed! Let's enter another email to sign in!</p>}
                 </FormLayout>
             </div>
         </div>
